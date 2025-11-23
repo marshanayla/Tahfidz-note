@@ -10,6 +10,9 @@ const displayName = document.getElementById('displayName');
 const welcomeName = document.getElementById('welcomeName');
 const changeNameBtn = document.getElementById('changeNameBtn');
 
+// Current user name
+let currentUserName = savedName || null;
+
 // Surah entry elements
 const surahForm = document.getElementById('surahForm');
 const surahNameInput = document.getElementById('surahName');
@@ -24,11 +27,20 @@ const closeEncouragementBtn = document.getElementById('closeEncouragementBtn');
 // Store selected feeling
 let selectedFeeling = null;
 
+// Function to get storage key for user entries
+function getUserEntriesKey(userName) {
+    return `tahfidzEntries_${userName}`;
+}
+
 // Function to save name
 function saveName(name) {
+    currentUserName = name;
     localStorage.setItem('tahfidzUserName', name);
     displayName.textContent = name;
     welcomeName.textContent = name;
+    
+    // Load this user's entries
+    displayEntries();
 }
 
 // Function to show app and hide modal
@@ -43,6 +55,8 @@ function showNameModal() {
     app.classList.add('hidden');
     userNameInput.value = '';
     userNameInput.focus();
+    // Clear current user when switching
+    currentUserName = null;
 }
 
 // Handle form submission
@@ -74,14 +88,23 @@ function formatDate(dateString) {
     return date.toLocaleDateString('en-US', options);
 }
 
-// Function to get all entries from localStorage
+// Function to get all entries from localStorage for current user
 function getEntries() {
-    const entries = localStorage.getItem('tahfidzEntries');
+    if (!currentUserName) {
+        return [];
+    }
+    const entriesKey = getUserEntriesKey(currentUserName);
+    const entries = localStorage.getItem(entriesKey);
     return entries ? JSON.parse(entries) : [];
 }
 
 // Function to save entry
 function saveEntry(surahName, verses, feeling) {
+    if (!currentUserName) {
+        alert('Please enter your name first');
+        return;
+    }
+    
     const entries = getEntries();
     const today = getTodayDateString();
     
@@ -104,7 +127,9 @@ function saveEntry(surahName, verses, feeling) {
         entries.unshift(entry); // Add to beginning
     }
     
-    localStorage.setItem('tahfidzEntries', JSON.stringify(entries));
+    // Save to current user's storage
+    const entriesKey = getUserEntriesKey(currentUserName);
+    localStorage.setItem(entriesKey, JSON.stringify(entries));
     displayEntries();
 }
 
@@ -211,10 +236,11 @@ encouragementModal.addEventListener('click', (e) => {
 // Initialize app
 if (savedName) {
     // Name is saved, show the app
+    currentUserName = savedName;
     displayName.textContent = savedName;
     welcomeName.textContent = savedName;
     showApp();
-    displayEntries(); // Load and display saved entries
+    displayEntries(); // Load and display saved entries for this user
 } else {
     // No name saved, show the modal
     showNameModal();
