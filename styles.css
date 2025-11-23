@@ -179,6 +179,204 @@ main {
     font-weight: 600;
 }
 
+/* Surah Entry Box */
+.surah-entry-box {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 30px;
+    margin: 30px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.surah-entry-box h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+#surahForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group label {
+    color: #333;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+#surahName {
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    outline: none;
+    font-family: inherit;
+}
+
+#surahName:focus {
+    border-color: #667eea;
+}
+
+.emoji-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.emoji-btn {
+    background: white;
+    border: 3px solid #e0e0e0;
+    border-radius: 15px;
+    font-size: 48px;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.emoji-btn:hover {
+    transform: scale(1.1);
+    border-color: #667eea;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.emoji-btn.active {
+    border-color: #667eea;
+    background: #f0f4ff;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    transform: scale(1.05);
+}
+
+.emoji-btn[data-feeling="easy"].active {
+    border-color: #4caf50;
+    background: #e8f5e9;
+}
+
+.emoji-btn[data-feeling="difficult"].active {
+    border-color: #ff9800;
+    background: #fff3e0;
+}
+
+.btn-save {
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-save:active {
+    transform: translateY(0);
+}
+
+/* Saved Entries */
+.saved-entries {
+    margin-top: 40px;
+}
+
+.saved-entries h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.entries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.no-entries {
+    text-align: center;
+    color: #999;
+    padding: 40px;
+    font-style: italic;
+}
+
+.entry-item {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: box-shadow 0.3s, transform 0.2s;
+}
+
+.entry-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.entry-date {
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.entry-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.entry-surah {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.entry-feeling {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.entry-feeling.easy {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.entry-feeling.difficult {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.entry-feeling .emoji {
+    font-size: 20px;
+}
+
 /* Animations */
 @keyframes fadeIn {
     from {
@@ -217,6 +415,21 @@ main {
 
     .modal-content h2 {
         font-size: 24px;
+    }
+
+    .surah-entry-box {
+        padding: 20px;
+    }
+
+    .emoji-btn {
+        width: 80px;
+        height: 80px;
+        font-size: 40px;
+    }
+
+    .entry-content {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 
