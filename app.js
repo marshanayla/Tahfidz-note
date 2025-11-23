@@ -27,17 +27,41 @@ const closeEncouragementBtn = document.getElementById('closeEncouragementBtn');
 // Store selected feeling
 let selectedFeeling = null;
 
+// Function to normalize username (trim and handle case consistently)
+function normalizeUserName(userName) {
+    if (!userName) return '';
+    return userName.trim();
+}
+
+// Function to migrate old data if username format changed
+function migrateUserData(oldName, newName) {
+    const oldKey = `tahfidzEntries_${oldName}`;
+    const newKey = `tahfidzEntries_${newName}`;
+    
+    // If old data exists and new data doesn't, migrate it
+    const oldData = localStorage.getItem(oldKey);
+    const newData = localStorage.getItem(newKey);
+    
+    if (oldData && !newData && oldName !== newName) {
+        localStorage.setItem(newKey, oldData);
+        // Keep old data as backup, or remove it
+        // localStorage.removeItem(oldKey); // Uncomment if you want to remove old data
+    }
+}
+
 // Function to get storage key for user entries
 function getUserEntriesKey(userName) {
-    return `tahfidzEntries_${userName}`;
+    const normalized = normalizeUserName(userName);
+    return `tahfidzEntries_${normalized}`;
 }
 
 // Function to save name
 function saveName(name) {
-    currentUserName = name;
-    localStorage.setItem('tahfidzUserName', name);
-    displayName.textContent = name;
-    welcomeName.textContent = name;
+    const normalizedName = normalizeUserName(name);
+    currentUserName = normalizedName;
+    localStorage.setItem('tahfidzUserName', normalizedName);
+    displayName.textContent = normalizedName;
+    welcomeName.textContent = normalizedName;
     
     // Load this user's entries
     displayEntries();
@@ -65,7 +89,15 @@ nameForm.addEventListener('submit', (e) => {
     const name = userNameInput.value.trim();
     
     if (name) {
-        saveName(name);
+        const normalizedName = normalizeUserName(name);
+        
+        // If switching from another user, check for data migration
+        if (currentUserName && currentUserName !== normalizedName) {
+            // This is a profile switch, data should already be separate
+            // But we ensure the new user's data is loaded correctly
+        }
+        
+        saveName(normalizedName);
         showApp();
     }
 });
@@ -93,9 +125,20 @@ function getEntries() {
     if (!currentUserName) {
         return [];
     }
-    const entriesKey = getUserEntriesKey(currentUserName);
+    const normalizedName = normalizeUserName(currentUserName);
+    const entriesKey = getUserEntriesKey(normalizedName);
     const entries = localStorage.getItem(entriesKey);
-    return entries ? JSON.parse(entries) : [];
+    
+    // If entries exist, return them; otherwise return empty array
+    if (entries) {
+        try {
+            return JSON.parse(entries);
+        } catch (e) {
+            console.error('Error parsing entries:', e);
+            return [];
+        }
+    }
+    return [];
 }
 
 // Function to save entry
@@ -105,6 +148,7 @@ function saveEntry(surahName, verses, feeling) {
         return;
     }
     
+    const normalizedName = normalizeUserName(currentUserName);
     const entries = getEntries();
     const today = getTodayDateString();
     
@@ -127,9 +171,13 @@ function saveEntry(surahName, verses, feeling) {
         entries.unshift(entry); // Add to beginning
     }
     
-    // Save to current user's storage
-    const entriesKey = getUserEntriesKey(currentUserName);
+    // Save to current user's storage with normalized name
+    const entriesKey = getUserEntriesKey(normalizedName);
     localStorage.setItem(entriesKey, JSON.stringify(entries));
+    
+    // Ensure currentUserName is normalized
+    currentUserName = normalizedName;
+    
     displayEntries();
 }
 
@@ -236,9 +284,17 @@ encouragementModal.addEventListener('click', (e) => {
 // Initialize app
 if (savedName) {
     // Name is saved, show the app
-    currentUserName = savedName;
-    displayName.textContent = savedName;
-    welcomeName.textContent = savedName;
+    // Normalize the saved name to ensure consistency
+    const normalizedName = normalizeUserName(savedName);
+    currentUserName = normalizedName;
+    displayName.textContent = normalizedName;
+    welcomeName.textContent = normalizedName;
+    
+    // Update localStorage with normalized name if it was different
+    if (savedName !== normalizedName) {
+        localStorage.setItem('tahfidzUserName', normalizedName);
+    }
+    
     showApp();
     displayEntries(); // Load and display saved entries for this user
 } else {
