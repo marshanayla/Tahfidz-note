@@ -200,6 +200,10 @@ main {
     gap: 20px;
 }
 
+#surahForm.hidden {
+    display: none;
+}
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -212,7 +216,8 @@ main {
     font-size: 16px;
 }
 
-#surahName {
+#surahName,
+#verses {
     padding: 15px;
     border: 2px solid #e0e0e0;
     border-radius: 10px;
@@ -222,7 +227,8 @@ main {
     font-family: inherit;
 }
 
-#surahName:focus {
+#surahName:focus,
+#verses:focus {
     border-color: #667eea;
 }
 
@@ -293,6 +299,75 @@ main {
     transform: translateY(0);
 }
 
+/* Exit Section */
+.exit-section {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #e0e0e0;
+}
+
+.exit-section.hidden {
+    display: none;
+}
+
+.btn-exit {
+    padding: 12px 30px;
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-exit:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-exit:active {
+    transform: translateY(0);
+}
+
+/* Encouragement Modal */
+.encouragement-content {
+    max-width: 500px;
+}
+
+.encouragement-content h2 {
+    color: #667eea;
+    margin-bottom: 30px;
+    font-size: 24px;
+    line-height: 1.5;
+}
+
+.btn-close {
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.btn-close:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-close:active {
+    transform: translateY(0);
+}
+
 /* Saved Entries */
 .saved-entries {
     margin-top: 40px;
@@ -347,10 +422,22 @@ main {
     gap: 15px;
 }
 
+.entry-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .entry-surah {
     font-size: 20px;
     font-weight: 600;
     color: #333;
+}
+
+.entry-verses {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
 }
 
 .entry-feeling {

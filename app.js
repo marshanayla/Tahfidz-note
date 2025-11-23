@@ -13,8 +13,13 @@ const changeNameBtn = document.getElementById('changeNameBtn');
 // Surah entry elements
 const surahForm = document.getElementById('surahForm');
 const surahNameInput = document.getElementById('surahName');
+const versesInput = document.getElementById('verses');
 const emojiButtons = document.querySelectorAll('.emoji-btn');
 const entriesList = document.getElementById('entriesList');
+const exitSection = document.getElementById('exitSection');
+const exitBtn = document.getElementById('exitBtn');
+const encouragementModal = document.getElementById('encouragementModal');
+const closeEncouragementBtn = document.getElementById('closeEncouragementBtn');
 
 // Store selected feeling
 let selectedFeeling = null;
@@ -76,7 +81,7 @@ function getEntries() {
 }
 
 // Function to save entry
-function saveEntry(surahName, feeling) {
+function saveEntry(surahName, verses, feeling) {
     const entries = getEntries();
     const today = getTodayDateString();
     
@@ -86,6 +91,7 @@ function saveEntry(surahName, feeling) {
     const entry = {
         date: today,
         surah: surahName,
+        verses: verses,
         feeling: feeling,
         timestamp: new Date().toISOString()
     };
@@ -115,12 +121,16 @@ function displayEntries() {
         const emoji = entry.feeling === 'easy' ? '😊' : '😔';
         const feelingText = entry.feeling === 'easy' ? 'Easy' : 'Difficult';
         const feelingClass = entry.feeling === 'easy' ? 'easy' : 'difficult';
+        const verses = entry.verses || 'N/A';
         
         return `
             <div class="entry-item">
                 <div class="entry-date">${formatDate(entry.date)}</div>
                 <div class="entry-content">
-                    <div class="entry-surah">${entry.surah}</div>
+                    <div class="entry-details">
+                        <div class="entry-surah">${entry.surah}</div>
+                        <div class="entry-verses">Verses: ${verses}</div>
+                    </div>
                     <div class="entry-feeling ${feelingClass}">
                         <span class="emoji">${emoji}</span>
                         <span>${feelingText}</span>
@@ -146,9 +156,15 @@ emojiButtons.forEach(btn => {
 surahForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const surahName = surahNameInput.value.trim();
+    const verses = versesInput.value.trim();
     
     if (!surahName) {
         alert('Please enter a Surah name');
+        return;
+    }
+    
+    if (!verses) {
+        alert('Please enter the verses (Ayat)');
         return;
     }
     
@@ -157,23 +173,39 @@ surahForm.addEventListener('submit', (e) => {
         return;
     }
     
-    saveEntry(surahName, selectedFeeling);
+    saveEntry(surahName, verses, selectedFeeling);
     
-    // Reset form
+    // Hide form and show exit button
+    surahForm.classList.add('hidden');
+    exitSection.classList.remove('hidden');
+});
+
+// Handle exit button click
+exitBtn.addEventListener('click', () => {
+    encouragementModal.classList.remove('hidden');
+});
+
+// Function to close encouragement modal and reset form
+function closeEncouragementAndReset() {
+    encouragementModal.classList.add('hidden');
+    // Reset form and show it again
+    surahForm.classList.remove('hidden');
+    exitSection.classList.add('hidden');
     surahNameInput.value = '';
+    versesInput.value = '';
     emojiButtons.forEach(b => b.classList.remove('active'));
     selectedFeeling = null;
-    
-    // Show success message
-    const submitBtn = surahForm.querySelector('.btn-save');
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = 'Saved! ✓';
-    submitBtn.style.background = '#4caf50';
-    
-    setTimeout(() => {
-        submitBtn.textContent = originalText;
-        submitBtn.style.background = '';
-    }, 2000);
+    surahNameInput.focus();
+}
+
+// Handle close encouragement modal
+closeEncouragementBtn.addEventListener('click', closeEncouragementAndReset);
+
+// Close modal when clicking outside
+encouragementModal.addEventListener('click', (e) => {
+    if (e.target === encouragementModal) {
+        closeEncouragementAndReset();
+    }
 });
 
 // Initialize app
