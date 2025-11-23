@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tahfidz Note</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Name Entry Modal -->
+    <div id="nameModal" class="modal">
+        <div class="modal-content">
+            <h2>Welcome to Tahfidz Note</h2>
+            <p>Please enter your name to continue</p>
+            <form id="nameForm">
+                <input 
+                    type="text" 
+                    id="userName" 
+                    placeholder="Enter your name" 
+                    required 
+                    autofocus
+                >
+                <button type="submit">Save & Continue</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app-container hidden">
+        <header>
+            <h1>Tahfidz Note</h1>
+            <div class="user-info">
+                <span id="displayName"></span>
+                <button id="changeNameBtn" class="btn-secondary">Change Name</button>
+            </div>
+        </header>
+        <main>
+            <div class="welcome-message">
+                <p>Welcome back, <span id="welcomeName"></span>!</p>
+                <p>Start tracking your Quran memorization progress.</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
